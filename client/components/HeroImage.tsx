@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export default function HeroImage({
@@ -10,13 +10,18 @@ export default function HeroImage({
   className?: string;
   alt?: string;
 }) {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Use a light-mode image when available; fall back to the dark image.
   // prefer the new landing asset if present
   const lightSrc = "/dermaqea.png";
   const darkSrc = "/dermaqea2.jpg";
-  const src = resolvedTheme === "dark" ? darkSrc : lightSrc;
+  const src = mounted && resolvedTheme === "dark" ? darkSrc : lightSrc;
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;

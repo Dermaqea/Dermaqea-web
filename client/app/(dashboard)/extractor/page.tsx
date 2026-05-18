@@ -98,7 +98,7 @@ export default function ExtractorPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <FileSearch className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-syne)" }}>Extract & Verify</h1>
+        <h1 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-heading)" }}>Extract & Verify</h1>
       </div>
       <p className="text-muted-foreground">
         Upload a packaging image to extract steganographic codes and cryptographically verify them.

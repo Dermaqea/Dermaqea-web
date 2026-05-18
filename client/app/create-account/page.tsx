@@ -192,7 +192,7 @@ export default function CreateAccountPage() {
 
           <Card className="border-border bg-card">
             <CardHeader>
-              <CardTitle style={{ fontFamily: "var(--font-syne)" }}>
+              <CardTitle style={{ fontFamily: "var(--font-heading)" }}>
                 Create your account
               </CardTitle>
               <CardDescription>

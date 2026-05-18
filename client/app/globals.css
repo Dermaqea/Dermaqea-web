@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -9,7 +8,7 @@
   --color-warning: var(--warning);
   --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
   --font-mono: var(--font-dm-mono), monospace;
-  --font-heading: var(--font-syne), var(--font-instrument-sans), system-ui, sans-serif;
+  --font-heading: var(--font-clash-display), var(--font-instrument-sans), system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,13 +45,28 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* --- Native Tailwind v4 Core Animations --- */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down: slide-down 0.3s ease-out;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-down {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 /* Hero side image blending */
 .hero-image {
-  /* Make the hero image blend seamlessly with the page background.
-     Remove the mask, rounded frame and drop shadow so the image itself
-     is shown without a visible white/rounded rectangle frame. */
   -webkit-mask-image: none;
   mask-image: none;
   -webkit-mask-size: 100% 100%;
@@ -61,23 +75,18 @@
   border-radius: 0;
   box-shadow: none;
   background: transparent;
-  /* Nudge the hero image 1cm right and 1cm down so it sits slightly offset */
   transform: translate(2cm, 2cm);
   will-change: transform;
 }
 
-/* Light mode adjustments so the image blends into white backgrounds */
 .light .hero-image {
-  /* Keep light mode simple as well */
   -webkit-mask-image: none;
   mask-image: none;
   box-shadow: none;
 }
 
-/* Wrapper so we can add a white overlay on light backgrounds to blend image edges */
 .hero-image-wrapper {
   position: relative;
-  /* Remove wrapper rounding and overflow clipping so the image edges are not boxed */
   border-radius: 0;
   overflow: visible;
 }
@@ -86,92 +95,88 @@
   display: block;
 }
 
-/* Add a subtle white-to-transparent gradient overlay on the left in light mode
-   to mask darker image pixels and blend into the page background. */
 .dark .hero-image-wrapper::before {
-  /* Remove dark overlay so the image isn't dimmed by a pseudo-element */
   content: none;
 }
 
 :root {
-  /* Light theme (default) design tokens - use green palette to match dark */
-  --background: #FFFFFF;
-  --foreground: #0F1720;
-  --card: #F8FAFC;
-  --card-foreground: #0F1720;
+  /* Enterprise Deep-Tech Theme - Premium Light Mode */
+  --background: #FAFAFA; /* Alabaster / Warm White */
+  --foreground: #18181B; /* Soft black / Graphite */
+  --card: #FFFFFF;
+  --card-foreground: #18181B;
   --popover: #FFFFFF;
-  --popover-foreground: #0F1720;
-  --primary: #16A34A; /* green */
+  --popover-foreground: #18181B;
+  --primary: #059669; /* Soft cyber green */
   --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #0F1720;
-  --muted: #F1F5F9;
-  --muted-foreground: #6B7280;
-  --accent: #16A34A;
+  --secondary: #F4F4F5; /* Very soft silver */
+  --secondary-foreground: #18181B;
+  --muted: #F4F4F5;
+  --muted-foreground: #71717A;
+  --accent: #059669;
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --warning: #F59E0B;
-  --border: #ECFDF5;
-  --input: #FFFFFF;
-  --ring: #16A34A;
-  --chart-1: #16A34A;
-  --chart-2: #F59E0B;
-  --chart-3: #BBF7D0;
-  --chart-4: #86EFAC;
-  --chart-5: #EF4444;
+  --border: #E4E4E7; /* Soft silver border */
+  --input: #F4F4F5;
+  --ring: #059669;
+  --chart-1: #059669;
+  --chart-2: #00B8D4;
+  --chart-3: #2979FF;
+  --chart-4: #651FFF;
+  --chart-5: #FF1744;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #0F1720;
-  --sidebar-primary: #16A34A;
+  --sidebar-foreground: #18181B;
+  --sidebar-primary: #059669;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F8FAFC;
-  --sidebar-accent-foreground: #0F1720;
-  --sidebar-border: #ECFDF5;
-  --sidebar-ring: #16A34A;
-  --verified-glow: 0 0 12px #16A34440;
+  --sidebar-accent: #F4F4F5;
+  --sidebar-accent-foreground: #18181B;
+  --sidebar-border: #E4E4E7;
+  --sidebar-ring: #059669;
+  --verified-glow: 0 0 40px rgba(5, 150, 105, 0.15);
   --radius: 0.5rem;
 }
 
 .dark {
-  /* Dark theme (green) tokens preserved from previous design */
-  --background: #080E0C;
-  --foreground: #E8F5EE;
-  --card: #0D1612;
-  --card-foreground: #E8F5EE;
-  --popover: #111F18;
-  --popover-foreground: #E8F5EE;
-  --primary: #3DDC84;
-  --primary-foreground: #080E0C;
-  --secondary: #111F18;
-  --secondary-foreground: #E8F5EE;
-  --muted: #111F18;
-  --muted-foreground: #4A7C5F;
-  --accent: #3DDC84;
-  --accent-foreground: #080E0C;
-  --destructive: #FF5252;
-  --warning: #F5C842;
-  --border: #4A7C5F;
-  --input: #111F18;
-  --ring: #3DDC84;
-  --chart-1: #3DDC84;
-  --chart-2: #F5C842;
-  --chart-3: #A8E6C3;
-  --chart-4: #4A7C5F;
-  --chart-5: #FF5252;
-  --sidebar: #0D1612;
-  --sidebar-foreground: #E8F5EE;
-  --sidebar-primary: #3DDC84;
-  --sidebar-primary-foreground: #080E0C;
-  --sidebar-accent: #111F18;
-  --sidebar-accent-foreground: #E8F5EE;
-  --sidebar-border: #4A7C5F;
-  --sidebar-ring: #3DDC84;
-  --verified-glow: 0 0 12px #3DDC8440;
-  --radius: 0.5rem;
+  /* Enterprise Deep-Tech Theme - Deep Green / Graphite */
+  --background: #020503; /* Very dark green/black */
+  --foreground: #F4F4F5; /* Silver/White */
+  --card: #040A07;
+  --card-foreground: #F4F4F5;
+  --popover: #030805;
+  --popover-foreground: #F4F4F5;
+  --primary: #00E676; /* Cyber green */
+  --primary-foreground: #000000;
+  --secondary: #0A140F; /* Darker graphite green */
+  --secondary-foreground: #F4F4F5;
+  --muted: #0A140F;
+  --muted-foreground: #9CA3AF;
+  --accent: #00E676;
+  --accent-foreground: #000000;
+  --destructive: #EF4444;
+  --warning: #F59E0B;
+  --border: #13241A;
+  --input: #040A07;
+  --ring: #00E676;
+  --chart-1: #00E676;
+  --chart-2: #00B8D4;
+  --chart-3: #2979FF;
+  --chart-4: #651FFF;
+  --chart-5: #FF1744;
+  --sidebar: #030805;
+  --sidebar-foreground: #F4F4F5;
+  --sidebar-primary: #00E676;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #0A140F;
+  --sidebar-accent-foreground: #F4F4F5;
+  --sidebar-border: #13241A;
+  --sidebar-ring: #00E676;
+  --verified-glow: 0 0 16px rgba(0, 230, 118, 0.4);
 }
 
-/* Leaf vein texture - subtle background pattern */
+/* Cryptographic texture - subtle background pattern */
 .body-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5v50M5 30h50M15 15l30 30M45 15L15 45' stroke='%233DDC84' stroke-opacity='0.03' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
+  background-image: radial-gradient(circle at center, rgba(0, 230, 118, 0.05) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20zM20 0h20v20H20V0z' fill='%2300E676' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 @layer base {
@@ -180,12 +185,84 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5v50M5 30h50M15 15l30 30M45 15L15 45' stroke='%233DDC84' stroke-opacity='0.03' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
+  }
+  /* Only apply the green background pattern in dark mode to keep light mode clean */
+  .dark body {
+    background-image: radial-gradient(circle at top right, rgba(0, 230, 118, 0.03) 0%, transparent 40%), url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20zM20 0h20v20H20V0z' fill='%2300E676' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-syne), var(--font-instrument-sans), system-ui, sans-serif;
+    font-family: var(--font-clash-display), var(--font-instrument-sans), system-ui, sans-serif;
   }
   .font-mono {
     font-family: var(--font-dm-mono), monospace;
   }
+}
+
+/* Glassmorphism utilities - Dark Mode (Default) */
+.glass {
+  background: rgba(4, 10, 7, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(10, 20, 15, 0.6) 0%, rgba(2, 5, 3, 0.8) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 230, 118, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Glassmorphism utilities - Light Mode overrides */
+html:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+html:not(.dark) .glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+}
+
+.neon-glow {
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.5), 0 0 20px rgba(0, 230, 118, 0.3);
+}
+
+/* Soft light mode glow */
+html:not(.dark) .neon-glow {
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2), 0 10px 30px rgba(5, 150, 105, 0.1);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #a1a1aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html:not(.dark) .text-gradient {
+  background: linear-gradient(to right, #18181B, #71717A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(to right, #00E676, #00B8D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html:not(.dark) .text-gradient-cyan {
+  background: linear-gradient(to right, #059669, #0891B2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

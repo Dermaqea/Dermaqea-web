@@ -55,7 +55,7 @@ export function Sidebar() {
     <aside className="flex h-screen w-64 flex-col border-r border-border bg-card">
       <div className="flex h-16 items-center border-b border-border px-6">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="text-xl font-semibold text-primary" style={{ fontFamily: "var(--font-syne)" }}>
+          <span className="text-xl font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>
             Dermaqea
           </span>
         </Link>
