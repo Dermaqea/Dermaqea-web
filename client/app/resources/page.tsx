@@ -3,8 +3,16 @@
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { ArrowRight, FileText } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+
+const _bezier: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const reveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.4, ease: _bezier, delay },
+});
 
 export default function ResourcesPage() {
   const resources = [
@@ -19,49 +27,48 @@ export default function ResourcesPage() {
       <NavBar />
 
       <main className="pt-32 pb-24">
-        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-6xl font-medium mb-6 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-16">
+          <motion.div {...reveal(0)} className="max-w-3xl">
+            <h1 className="text-4xl md:text-6xl font-medium mb-4 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
               Knowledge & <span className="text-primary">Insights</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Explore our research on the global counterfeit crisis, packaging security, and deep-tech authentication methodologies.
+            <p className="content-subhead mb-2">
+              Research on the global counterfeit crisis and deep-tech authentication.
+            </p>
+            <p className="content-body">
+              Packaging security methodologies and industry intelligence.
             </p>
           </motion.div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {resources.map((res, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="glass-card p-8 rounded-2xl group cursor-pointer hover:border-primary/50 transition-colors"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="px-3 py-1 rounded-full bg-secondary text-xs font-mono text-muted-foreground border border-border">
-                    {res.type}
-                  </div>
-                  <FileText className="h-5 w-5 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <h3 className="text-2xl font-medium mb-4 group-hover:text-primary transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
-                  {res.title}
-                </h3>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="text-sm text-muted-foreground">{res.date}</span>
-                  <ArrowRight className="h-5 w-5 text-primary transform group-hover:translate-x-2 transition-transform" />
-                </div>
-              </motion.div>
-            ))}
+        {/* Table-style list — not symmetric card grid */}
+        <section className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="hidden sm:grid grid-cols-[7rem_1fr_6rem] gap-4 px-6 pb-3 text-xs font-mono uppercase tracking-widest text-muted-foreground border-b border-border">
+            <span>Type</span>
+            <span>Title</span>
+            <span className="text-right">Date</span>
           </div>
+
+          <ul className="divide-y divide-border border border-border sm:border-t-0 rounded-xl overflow-hidden bg-card list-none p-0 m-0">
+            {resources.map((res, idx) => (
+              <motion.li key={idx} {...reveal(idx * 0.05)}>
+                <Link
+                  href="#"
+                  className="grid grid-cols-1 sm:grid-cols-[7rem_1fr_6rem] gap-2 sm:gap-4 items-start sm:items-center p-5 sm:px-6 hover:bg-secondary/30 fast-interaction group focus-visible:outline-none"
+                  aria-label={`${res.type}: ${res.title}`}
+                >
+                  <span className="text-xs font-mono text-primary uppercase">{res.type}</span>
+                  <span className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary fast-interaction">
+                    {res.title}
+                  </span>
+                  <span className="flex items-center justify-between sm:justify-end gap-2 text-sm text-muted-foreground font-mono">
+                    {res.date}
+                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary sm:hidden" aria-hidden />
+                  </span>
+                </Link>
+              </motion.li>
+            ))}
+          </ul>
         </section>
       </main>
 

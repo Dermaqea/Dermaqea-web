@@ -35,6 +35,9 @@ export default function NavBar() {
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-8">
+          <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            Home
+          </Link>
           <Link href="/technology" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
             Technology
           </Link>
@@ -85,6 +88,7 @@ export default function NavBar() {
             className="lg:hidden absolute top-20 left-0 w-full glass border-b border-primary/20"
           >
             <div className="mx-auto flex flex-col space-y-6 px-6 py-8">
+              <Link onClick={() => setOpen(false)} href="/" className="text-lg font-medium text-muted-foreground hover:text-primary">Home</Link>
               <Link onClick={() => setOpen(false)} href="/technology" className="text-lg font-medium text-muted-foreground hover:text-primary">Technology</Link>
               <Link onClick={() => setOpen(false)} href="/solutions" className="text-lg font-medium text-muted-foreground hover:text-primary">Solutions</Link>
               <Link onClick={() => setOpen(false)} href="/resources" className="text-lg font-medium text-muted-foreground hover:text-primary">Resources</Link>

@@ -75,7 +75,7 @@
   border-radius: 0;
   box-shadow: none;
   background: transparent;
-  transform: translate(2cm, 2cm);
+  transform: none;
   will-change: transform;
 }
 
@@ -100,19 +100,27 @@
 }
 
 :root {
+  /* Dermaqea palette — named tokens */
+  --canvas: #FAFAFA;
+  --ink: #18181B;
+  --veridian: #059669;
+  --slate: #52525B;
+  --mint-veil: #ECFDF5;
+  --silver: #E4E4E7;
+
   /* Enterprise Deep-Tech Theme - Premium Light Mode */
-  --background: #FAFAFA; /* Alabaster / Warm White */
-  --foreground: #18181B; /* Soft black / Graphite */
+  --background: var(--canvas);
+  --foreground: var(--ink);
   --card: #FFFFFF;
-  --card-foreground: #18181B;
+  --card-foreground: var(--ink);
   --popover: #FFFFFF;
-  --popover-foreground: #18181B;
-  --primary: #059669; /* Soft cyber green */
+  --popover-foreground: var(--ink);
+  --primary: var(--veridian);
   --primary-foreground: #FFFFFF;
-  --secondary: #F4F4F5; /* Very soft silver */
-  --secondary-foreground: #18181B;
+  --secondary: #F4F4F5;
+  --secondary-foreground: var(--ink);
   --muted: #F4F4F5;
-  --muted-foreground: #71717A;
+  --muted-foreground: var(--slate);
   --accent: #059669;
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
@@ -135,12 +143,34 @@
   --sidebar-ring: #059669;
   --verified-glow: 0 0 40px rgba(5, 150, 105, 0.15);
   --radius: 0.5rem;
+
+  /* 8px layout grid scale */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+
+  /* Motion timing curve required by spec */
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Max line-length helpers (ch based) */
+  --max-ch-center: 65ch; /* 600-650px range */
+  --max-ch-left: 52ch; /* left aligned prose */
 }
 
 .dark {
+  --canvas: #020503;
+  --ink: #F4F4F5;
+  --veridian: #00E676;
+  --slate: #A1A1AA;
+  --mint-veil: #0A140F;
+  --silver: #13241A;
+
   /* Enterprise Deep-Tech Theme - Deep Green / Graphite */
-  --background: #020503; /* Very dark green/black */
-  --foreground: #F4F4F5; /* Silver/White */
+  --background: var(--canvas);
+  --foreground: var(--ink);
   --card: #040A07;
   --card-foreground: #F4F4F5;
   --popover: #030805;
@@ -185,6 +215,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   /* Only apply the green background pattern in dark mode to keep light mode clean */
   .dark body {
@@ -208,10 +242,11 @@
 }
 
 .glass-card {
+  /* Replace heavy blurred shadows with crisp low-opacity borders */
   background: linear-gradient(145deg, rgba(10, 20, 15, 0.6) 0%, rgba(2, 5, 3, 0.8) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 230, 118, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 230, 118, 0.06);
+  box-shadow: none;
 }
 
 /* Glassmorphism utilities - Light Mode overrides */
@@ -231,7 +266,8 @@ html:not(.dark) .glass-card {
 }
 
 .neon-glow {
-  box-shadow: 0 0 10px rgba(0, 230, 118, 0.5), 0 0 20px rgba(0, 230, 118, 0.3);
+  /* toned down glow to avoid ambient floating feel */
+  box-shadow: 0 0 6px rgba(0, 230, 118, 0.18), 0 0 12px rgba(0, 230, 118, 0.1);
 }
 
 /* Soft light mode glow */
@@ -265,4 +301,126 @@ html:not(.dark) .text-gradient-cyan {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Utility: enforce max line length for centered prose */
+.max-ch-center {
+  max-width: var(--max-ch-center);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Utility: enforce max line length for left-aligned prose */
+.max-ch-left {
+  max-width: var(--max-ch-left);
+}
+
+/* Micro-interaction timing utility */
+.fast-interaction {
+  transition-timing-function: var(--motion-ease);
+  transition-duration: 180ms;
+}
+
+/* Reveal animation helper using required cubic-bezier */
+.reveal-up {
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform 300ms var(--motion-ease), opacity 300ms var(--motion-ease);
+}
+.reveal-up.in-view {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* --- Dermaqea signature element: micro-point lattice --- */
+.signature-lattice {
+  background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
+  background-size: 8px 8px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
+
+/* Pipeline connector for sequential sections */
+.pipeline-connector {
+  position: relative;
+}
+@media (min-width: 768px) {
+  .pipeline-connector::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -1rem;
+    width: 2rem;
+    height: 1px;
+    background: linear-gradient(to right, var(--primary), transparent);
+    transform: translateY(-50%);
+  }
+  .pipeline-connector:last-child::after {
+    display: none;
+  }
+}
+
+/* Content block type scale — eyebrow / heading / subhead / body */
+.content-eyebrow {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.content-heading {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-clash-display), var(--font-instrument-sans), system-ui, sans-serif;
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.18;
+  color: var(--foreground);
+}
+
+@media (min-width: 768px) {
+  .content-heading {
+    font-size: 2.25rem;
+  }
+}
+
+.content-subhead {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--foreground);
+}
+
+.content-body {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* Solutions segment accent — single brand green only */
+.segment-accent {
+  border-left: 3px solid var(--primary);
+}
+
+/* Visible keyboard focus — all interactive landing elements */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fast-interaction,
+  .reveal-up,
+  .animate-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
 }

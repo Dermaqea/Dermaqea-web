@@ -3,34 +3,42 @@
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { Users, Store, Building2, ShieldAlert } from "lucide-react";
+import { AudienceIllustration } from "@/components/illustrations/DermaqeaIllustrations";
+
+const _bezier: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const reveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.4, ease: _bezier, delay },
+});
 
 export default function SolutionsPage() {
   const solutions = [
     {
-      id: "brands",
-      icon: <Building2 className="h-8 w-8 text-primary" />,
+      id: "brands" as const,
       title: "For Beauty Brands",
-      desc: "Protect your reputation and revenue from sophisticated counterfeiters. Dermaqea provides absolute visibility into your supply chain and immediate alerts when gray-market or fake goods appear."
+      lead: "Absolute visibility into your supply chain.",
+      support: "Protect reputation and revenue from sophisticated counterfeiters. Immediate alerts when gray-market or fake goods appear.",
     },
     {
-      id: "pharmacies",
-      icon: <Store className="h-8 w-8 text-primary" />,
+      id: "pharmacies" as const,
       title: "For Pharmacies & Clinics",
-      desc: "Guarantee the safety and efficacy of the dermatological products you dispense. Our vendor authentication portal allows clinics to scan incoming batches to ensure origin authenticity."
+      lead: "Guarantee safety and efficacy of every batch.",
+      support: "Vendor authentication portal to scan incoming shipments and ensure origin authenticity.",
     },
     {
-      id: "consumers",
-      icon: <Users className="h-8 w-8 text-primary" />,
+      id: "consumers" as const,
       title: "For Consumers",
-      desc: "Skincare is healthcare. We empower consumers to verify product safety in seconds with a simple mobile scan before applying products to their skin."
+      lead: "Verify product safety in seconds.",
+      support: "Skincare is healthcare — a simple mobile scan before applying treatments to skin.",
     },
     {
-      id: "regulators",
-      icon: <ShieldAlert className="h-8 w-8 text-primary" />,
+      id: "regulators" as const,
       title: "For Regulators",
-      desc: "Equip customs officers and health inspectors with the cryptographic tools needed to identify and seize counterfeit cosmetics at the border."
-    }
+      lead: "Identify and seize counterfeits at the border.",
+      support: "Cryptographic tools for customs officers and health inspectors.",
+    },
   ];
 
   return (
@@ -38,43 +46,42 @@ export default function SolutionsPage() {
       <NavBar />
 
       <main className="pt-32 pb-24">
-        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-6xl font-medium mb-6 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-16">
+          <motion.div {...reveal(0)} className="max-w-3xl">
+            <h1 className="text-4xl md:text-6xl font-medium mb-4 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
               Solutions for the <span className="text-primary">Ecosystem</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Counterfeiting affects every layer of the supply chain. Dermaqea provides specialized verification workflows tailored to the unique needs of brands, vendors, and consumers.
+            <p className="content-subhead mb-2">
+              Counterfeiting affects every layer of the supply chain.
+            </p>
+            <p className="content-body">
+              Specialized verification workflows tailored to brands, vendors, and consumers.
             </p>
           </motion.div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col gap-12">
+        {/* Audience-segmented vertical stack — single brand-green accent */}
+        <section className="mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="space-y-0 border border-border rounded-2xl overflow-hidden bg-card divide-y divide-border">
             {solutions.map((sol, idx) => (
-              <motion.div
+              <motion.article
                 key={sol.id}
-                initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="glass-card rounded-2xl p-8 lg:p-12 flex flex-col md:flex-row items-center gap-8 border border-border/50"
+                {...reveal(idx * 0.06)}
+                className="segment-accent pl-6 sm:pl-8"
               >
-                <div className="flex-shrink-0">
-                  <div className="h-20 w-20 rounded-2xl bg-secondary flex items-center justify-center border border-primary/20 neon-glow">
-                    {sol.icon}
+                <div className="flex flex-col md:flex-row md:items-center gap-6 p-8 sm:p-10">
+                  <div className="shrink-0 flex items-center justify-center w-28 h-24 rounded-xl bg-secondary/30 border border-border">
+                    <AudienceIllustration type={sol.id} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h2 className="content-heading">
+                      {sol.title}
+                    </h2>
+                    <p className="content-subhead">{sol.lead}</p>
+                    <p className="content-body">{sol.support}</p>
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-3xl font-medium mb-4" style={{ fontFamily: "var(--font-heading)" }}>{sol.title}</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">{sol.desc}</p>
-                </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         </section>

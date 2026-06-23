@@ -3,73 +3,118 @@
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { Fingerprint, ScanLine, Network, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import {
+  EmbedSignatureIllustration,
+  ScanDecodeIllustration,
+  ChainAnchorIllustration,
+} from "@/components/illustrations/DermaqeaIllustrations";
+
+const _bezier: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const reveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.4, ease: _bezier, delay },
+});
 
 export default function TechnologyPage() {
+  const pillars = [
+    {
+      id: "embed",
+      title: "Invisible Cryptographic Signatures",
+      lead: "Micro-structure altered at the pixel level.",
+      support: "Flawless to the human eye — a unique cryptographic key to our scanning algorithm.",
+      illustration: EmbedSignatureIllustration,
+      layout: "illustration-right" as const,
+    },
+    {
+      id: "scan",
+      title: "Mobile Verification Experience",
+      lead: "Standard smartphone cameras reconstruct the signature.",
+      support: "Edge-computed algorithms — no specialized hardware required.",
+      illustration: ScanDecodeIllustration,
+      layout: "illustration-left" as const,
+    },
+    {
+      id: "ledger",
+      title: "Decentralized Ledger",
+      lead: "Every signature anchored to an immutable blockchain.",
+      support: "Signatures cannot be duplicated, spoofed, or reverse-engineered.",
+      illustration: ChainAnchorIllustration,
+      layout: "illustration-right" as const,
+    },
+    {
+      id: "dashboard",
+      title: "Brand Protection Infrastructure",
+      lead: "Real-time telemetry on scan locations and supply chain integrity.",
+      support: "An enterprise dashboard empowering brands to act decisively on anomalous activity.",
+      illustration: ChainAnchorIllustration,
+      layout: "illustration-left" as const,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30 selection:text-primary">
       <NavBar />
 
       <main className="pt-32 pb-24">
-        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-6xl font-medium mb-6 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 mb-20">
+          <motion.div {...reveal(0)} className="max-w-3xl">
+            <h1 className="text-4xl md:text-6xl font-medium mb-4 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
               The Science of <span className="text-primary">Invisible Trust</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Dermaqea&apos;s technology embeds imperceptible cryptographic signatures into the physical packaging of skincare products, creating a secure, unbroken chain of custody from manufacturer to consumer.
+            <p className="content-subhead mb-2">
+              Imperceptible cryptographic signatures embedded into physical packaging.
+            </p>
+            <p className="content-body">
+              A secure, unbroken chain of custody from manufacturer to consumer.
             </p>
           </motion.div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {[
-              {
-                icon: <Fingerprint className="h-8 w-8 text-primary" />,
-                title: "Invisible Cryptographic Signatures",
-                desc: "We alter the micro-structure of the packaging artwork at the pixel level. To the human eye, the design remains flawless. To our scanning algorithm, it's a unique cryptographic key."
-              },
-              {
-                icon: <ScanLine className="h-8 w-8 text-primary" />,
-                title: "Mobile Verification Experience",
-                desc: "Consumers and inspectors use standard smartphone cameras to verify products. The edge-computed algorithm reconstructs the embedded signature instantly without requiring specialized hardware."
-              },
-              {
-                icon: <Network className="h-8 w-8 text-primary" />,
-                title: "Decentralized Ledger",
-                desc: "Every product signature is anchored to an immutable blockchain ledger. This ensures that signatures cannot be duplicated, spoofed, or reverse-engineered by counterfeiters."
-              },
-              {
-                icon: <ShieldCheck className="h-8 w-8 text-primary" />,
-                title: "Brand Protection Infrastructure",
-                desc: "An enterprise dashboard provides real-time telemetry on scan locations, anomalous activity, and supply chain integrity, empowering brands to act decisively."
-              }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="glass-card p-8 rounded-2xl relative group"
+        {/* Alternating split layout — not symmetric icon grid */}
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 space-y-16">
+          {pillars.map((pillar, idx) => {
+            const Illus = pillar.illustration;
+            const illusFirst = pillar.layout === "illustration-left";
+            return (
+              <motion.article
+                key={pillar.id}
+                {...reveal(idx * 0.05)}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center ${idx > 0 ? "pt-16 border-t border-border" : ""}`}
               >
-                <div className="absolute top-0 right-0 p-8 opacity-5 text-primary">
-                  {feature.icon}
+                <div className={illusFirst ? "lg:order-1" : "lg:order-2"}>
+                  <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+                    <Illus className="w-full max-w-sm mx-auto" />
+                  </div>
                 </div>
-                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 mb-6">
-                  {feature.icon}
+                <div className={illusFirst ? "lg:order-2" : "lg:order-1"}>
+                  <span className="content-eyebrow">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <h2 className="content-heading">
+                    {pillar.title}
+                  </h2>
+                  <p className="content-subhead">{pillar.lead}</p>
+                  <p className="content-body">{pillar.support}</p>
                 </div>
-                <h3 className="text-2xl font-medium mb-4" style={{ fontFamily: "var(--font-heading)" }}>{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+              </motion.article>
+            );
+          })}
+        </section>
+
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 mt-20">
+          <motion.div {...reveal(0)} className="rounded-2xl border border-primary/20 bg-primary/5 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className="content-subhead mb-1">Ready to go deeper?</p>
+              <p className="content-body">Read the full cryptographic packaging integration guide.</p>
+            </div>
+            <Link href="/resources" className="inline-flex items-center text-primary font-medium fast-interaction shrink-0 focus-visible:outline-none">
+              View Whitepaper <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
+            </Link>
+          </motion.div>
         </section>
       </main>
 
